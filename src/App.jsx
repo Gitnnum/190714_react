@@ -1,16 +1,17 @@
 import React,{Component} from 'react'
-import {Button, message} from 'antd'
-import {Route,Switch} from 'react-router-dom'
-import {HashRouter,BrowserRouter} from 'react-router-dom'
+import {Route,Switch,HashRouter} from 'react-router-dom'
+import Admin from './pages/admin/admin'
+import Login from './pages/login/login'
 export default class App extends Component{
-    handleClick = () => {
-        message.success('成功啦...');
-      }
-    
-      render() {
-        return (
-          <Button type='primary' onClick={this.handleClick}>学习</Button>
+    render(){
+        return(
+            <HashRouter>
+                <Switch>
+                    <Route path='/login' component={Login}/>>
+                    <Route path='/admin' component={Admin}/>
+                </Switch>
+            </HashRouter>
         )
-      }
     }
+}
     
