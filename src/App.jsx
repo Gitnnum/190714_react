@@ -1,12 +1,16 @@
 import React,{Component} from 'react'
+import {Button, message} from 'antd'
 import {Route,Switch} from 'react-router-dom'
 import {HashRouter,BrowserRouter} from 'react-router-dom'
 export default class App extends Component{
-    render(){
+    handleClick = () => {
+        message.success('成功啦...');
+      }
+    
+      render() {
         return (
-            <div> 
-                <h1>哈哈哈哈</h1>
-            </div>
+          <Button type='primary' onClick={this.handleClick}>学习</Button>
         )
+      }
     }
-}
+    
