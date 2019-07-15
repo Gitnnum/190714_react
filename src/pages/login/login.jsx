@@ -5,6 +5,7 @@ import './login.less'
 import logo from './images/logo.png'
 import {reqLogin} from '../../api'
 import storageUtills from '../../utills/storageUtills'
+import memoryUtils from '../../utills/memoryUtils'
 class Login extends Component{
     handleSubmit = e => {
         e.preventDefault();
@@ -18,6 +19,7 @@ class Login extends Component{
                     const user = result.data
                     // localStorage.setItem('user_key',JSON.stringify(user))
                     storageUtills.saveUser(user)
+                    memoryUtils.user = user//内存中存储
                     this.props.history.replace('/')
                     message.success('登录成功')
                 }else{
@@ -43,7 +45,8 @@ class Login extends Component{
     }
     render(){
         // const user = JSON.parse(localStorage.getItem('user_key')  || '{}')
-        const user = storageUtills.getUser()
+        // const user = storageUtills.getUser()
+        const user = memoryUtils.user
         if(user._id){
             return <Redirect to='/'/>
         }
