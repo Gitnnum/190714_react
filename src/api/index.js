@@ -30,7 +30,15 @@ export const reqWeather = (city) => {
     })
     
 }
-  
+//发送获取分类列表请求
+export const reqCategorys = () => ajax(BASE + '/manage/category/list')
+
+//发送添加分类的请求
+export const reqAddCategory = (categoryName) =>ajax.post(BASE + '/manage/category/add',{categoryName})
+
+//发送修改分类的请求
+export const reqUpdateCategory = ({categoryId,categoryName}) =>ajax.post(BASE + '/manage/category/update',{categoryId,categoryName})
+
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
