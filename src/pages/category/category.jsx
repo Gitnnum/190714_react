@@ -11,11 +11,14 @@ import AddUpdateForm from './add-update-form'
 export default class Category extends Component {
   state = {
     categorys:[], //所有分类的数组
+    loading:false,
     showStatus:0, //0 对话框不显示 1 显示添加对话框 2 显示修改对话框
   }
   //获取分类列表信息
   getCategorys = async () =>{
+    this.setState({loading:true})
     const result = await reqCategorys()
+    this.setState({loading:false})
     if(result.status === 0){
       const  categorys = result.data
       this.setState({categorys})
@@ -63,7 +66,6 @@ export default class Category extends Component {
         //问题：修改后一条数据后。点击其他的会导致input框内的数据为最后一次输入的数据
         this.form.resetFields()//重置一组输入控件的值为 initialValue        ，如不传入参数，则重置所有组件
 
-
         this.setState({ showStatus:0})
         const action = showStatus===1?'添加':'修改'
         if(result.status===0){
@@ -95,7 +97,7 @@ export default class Category extends Component {
   }
 
   render() {
-    const { categorys, showStatus } = this.state
+    const { categorys, showStatus, loading } = this.state
 
     // 读取更新的分类名称
     const category = this.category || {}
@@ -114,6 +116,7 @@ export default class Category extends Component {
           columns={this.columns}
           dataSource={categorys}
           bordered={true}
+          loading={loading}
           pagination={{ defaultPageSize: 4, showQuickJumper: true}}
         />
         <Modal

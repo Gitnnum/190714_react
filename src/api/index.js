@@ -39,6 +39,19 @@ export const reqAddCategory = (categoryName) =>ajax.post(BASE + '/manage/categor
 //发送修改分类的请求
 export const reqUpdateCategory = ({categoryId,categoryName}) =>ajax.post(BASE + '/manage/category/update',{categoryId,categoryName})
 
+//发送获取分类列表请求
+export const reqProducts = (pageNum,pageSize) => ajax(BASE + '/manage/product/list',{
+    params:{
+        pageNum,
+        pageSize
+    }
+})
+// export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
+//     params: { // 包含所有query参数的对象
+//       pageNum,
+//       pageSize
+//     }
+//   })
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
