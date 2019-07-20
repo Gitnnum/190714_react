@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+       /* 
+    自定义实现一组数组声明式方法
+    1. map()
+    2. reduce()
+    3. filter()
+    4. find()
+    5. findIndex()
+    6. every()
+    7. some()
+    */
+
+
+    //1.map方法
+    //定义map方法
+    Array.prototype.map = function(callback){
+        var arr = []
+        for (let index = 0; index < this.length; index++) {
+           arr.push(callback(this[index],index))
+        }
+        return  arr
+    }
+    var array = [1,2,3,4,5,6,8,9]
+    var result = array.map((item ,index)=>{
+        if(index%2 === 0){
+            return item + 10
+        }else{
+            return item + 20
+        }
+    })
+    console.log(result)
+
+    //2.reduce方法
+    //定义reduce方法
+    Array.prototype.reduce = function(callback,inintValue){
+        var total = inintValue
+        for (let index = 0; index < this.length; index++) {
+            total = callback(total,this[index],index)
+         }
+        return total
+    }
+    result = array.reduce((pre,item,index)=>{
+        if(index%2 === 1 && item%2 ===1){
+            pre += item
+        }
+        return pre
+    },0)
+    console.log(result)
+
+    //3.filter方法
+    //定义filter方法
+    Array.prototype.filter = function(callback){
+        var arr = []
+        for (let index = 0; index < this.length; index++) {
+            if(callback(this[index],index)){
+                arr.push(this[index])
+            }           
+        }
+        return arr
+    }
+    result = array.filter((item,index)=>{
+        if(index%2 === 1 && item%2 ===1){
+            return item
+        }
+    })
+    console.log(result)
+
+    //4.find方法
+    //定义find方法
+    Array.prototype.find = function(callback){
+        for (let index = 0; index < this.length; index++) {
+            if(callback(this[index],index)){
+                return this[index]
+            }
+        }
+        return -1
+    }
+    result = array.find((item,index)=>index%2 === 1 && item%2 ===1)
+    console.log(result)
+
+    //5.findIndex方法
+    //定义findIndex方法
+    Array.prototype.findIndex = function(callback){
+        for (let index = 0; index < this.length; index++) {
+            if(callback(this[index],index)){
+                return index
+            }
+        }
+        return -1
+    }
+    result = array.findIndex((item,index)=>index%2 === 1 && item%2 ===1)
+    console.log(result)
+
+    //6.every()
+    //定义every方法
+    Array.prototype.every = function(callback){
+        for (let index = 0; index < this.length; index++) {
+            if(!callback(this[index],index)){
+                return false
+            }
+        }
+        return true
+    }
+    result = array.every((item,index)=> item>4)
+    console.log(result)
+    //7.some()
+    //定义some方法
+    Array.prototype.some = function(callback){
+        for (let index = 0; index < this.length; index++) {
+            if(callback(this[index],index)){
+                return true
+            }
+        }
+        return false
+    }
+    result = array.some((item,index)=> item>4)
+    console.log(result)
+  </script>
+</body>
+</html>

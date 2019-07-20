@@ -46,12 +46,31 @@ export const reqProducts = (pageNum,pageSize) => ajax(BASE + '/manage/product/li
         pageSize
     }
 })
-// export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
-//     params: { // 包含所有query参数的对象
-//       pageNum,
-//       pageSize
+//根据Name/desc搜索产品分页列表
+export const reqSearchProducts = ({pageNum,pageSize,searchType,searchName}) =>ajax(BASE +'/manage/product/search',{
+    params:{
+        pageNum,
+        pageSize,
+        [searchType]:searchName
+    }
+})
+
+//更新商品上下架
+export const reqUpdateStatus = (productId,status)=>ajax.post(BASE+'/manage/product/updateStatus',{productId,status})
+
+//获取商品对应id的分类
+export const reqCategoryById = (categoryId)=>ajax(BASE+'/manage/category/info',{
+    params:{
+        categoryId
+    }
+})
+
+//添加商品
+// export const reqAddProduct = ()=>ajax(BASE +'/manage/product/add',{
+//     data:{
+
 //     }
-//   })
+// })
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)

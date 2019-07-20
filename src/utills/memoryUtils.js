@@ -1,4 +1,6 @@
 import stotageUtills from './storageUtills'
+const user =  stotageUtills.getUser()
 export default {
-    user : stotageUtills.getUser()
+    user :user,
+    product:{}
 }

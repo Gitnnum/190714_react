@@ -21,7 +21,9 @@ class LeftNav extends Component {
                     </Menu.Item>
                 ))
             }else{
-                const cItem = item.children.find( cItem => cItem.key === path) 
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                // const cItem  = item.children.find(cItem =>path.indexOf(cItem.key) === 0)
+                // const cItem = item.children.find( cItem => cItem.key === path) 
                 if(cItem){
                     this.openKey = item.key
                     // console.log(this.openKey)
@@ -57,7 +59,8 @@ class LeftNav extends Component {
                     </Menu.Item>
                 )
             }else{
-                const cItem = item.children.find( cItem => cItem.key === path) 
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                // const cItem = item.children.find( cItem => cItem.key === path) 
                 if(cItem){
                     this.openKey = item.key
                     // console.log(this.openKey)
@@ -83,8 +86,11 @@ class LeftNav extends Component {
         this.menuNode = this.getMenuNodes(menuList)
     }
     render() {
-        //路由组件才有location属性
-        const selectKey = this.props.location.pathname
+        // 得到当前请求路径, 作为选中菜单项的key
+        let selectKey = this.props.location.pathname // /product/xxx
+            if (selectKey.indexOf('/product')===0) {
+            selectKey = '/product'
+        }
         return (
             <div className='left-nav'>
                <Link className='left-nav-link' to='/home'>

@@ -1,3 +1,4 @@
+
 import React,{Component} from 'react'
 import {Route,Switch,HashRouter} from 'react-router-dom'
 import Admin from './pages/admin/admin'
@@ -14,4 +15,4 @@ export default class App extends Component{
         )
     }
 }
-    
+   
