@@ -1,16 +1,24 @@
 import React, { Component } from 'react'
-import {Card,Icon,Form,Button,Select,Input} from 'antd'
+import {Card,Icon,Form,Button,Select,Input,message} from 'antd'
 
 import LinkButton from '../../components/link-button'
 import memoryUtils from '../../utills/memoryUtils.js'
 import PicturesWall from './pictureswall'
-import {reqCategorys} from '../../api'
+import {reqCategorys,reqAddUpdateProduct} from '../../api'
+import RichTextEditor from './rich-text-editor'
 const Item  = Form.Item
 const Option = Select.Option
 class ProductAddUpdate extends Component {
     state = {
         categorys:[]
     }
+    constructor(props) {
+        super(props);
+        // 创建ref容器, 并保存到组件对象
+        this.pwRef = React.createRef()
+        this.editorRef = React.createRef()
+    }
+
     //获取分类信息
     getCategorys = async ()=>{
         const result  = await reqCategorys()
@@ -34,11 +42,27 @@ class ProductAddUpdate extends Component {
     //提交回调
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
           if (!err) {
             //发送请求
             const {name, desc, price, categoryId} = values
-            console.log('发送请求', name, desc, price, categoryId)
+            // console.log('发送请求', name, desc, price, categoryId)
+            //收集子组件的imgs信息
+            const imgs = this.pwRef.current.getImgs()
+            const detail = this.editorRef.current.getDetail()
+            //包装product对象
+            const product = {name, desc, price, categoryId,imgs,detail}
+            if(this.isUpdate){
+                product._id = this.product._id
+            }
+            //发送添加或修改请求
+            const result  = await reqAddUpdateProduct(product)
+            if(result.status === 0){
+                message.success(`${this.isUpdate ? '修改':'添加'}成功`)
+                this.props.history.replace('/product')
+            }else{
+                message.error(result.msg)
+            }
           }
         });
       };
@@ -111,10 +135,10 @@ class ProductAddUpdate extends Component {
                         )}
                     </Item>
                     <Item label="商品图片">
-                        <PicturesWall />
+                        <PicturesWall ref={this.pwRef} imgs = {product.imgs}/>
                     </Item>
-                    <Item label="商品详情">
-                        <div>商品详情组件</div>
+                    <Item label="商品详情" wrapperCol={{ span: 20 }}>
+                        <RichTextEditor ref={this.editorRef} detail = {product.detail}/>
                     </Item>
                     <Item>
                         <Button type="primary" htmlType="submit">提交</Button>

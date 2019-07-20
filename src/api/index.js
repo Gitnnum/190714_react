@@ -65,12 +65,11 @@ export const reqCategoryById = (categoryId)=>ajax(BASE+'/manage/category/info',{
     }
 })
 
-//添加商品
-// export const reqAddProduct = ()=>ajax(BASE +'/manage/product/add',{
-//     data:{
+//删除图片
+export const reqDeleteImg = (name) =>ajax.post(BASE +'/manage/img/delete',{name})
 
-//     }
-// })
+//添加或修改商品
+export const reqAddUpdateProduct = (product)=>ajax.post(BASE +'/manage/product/'+(product._id?'update':'add'),product)
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
