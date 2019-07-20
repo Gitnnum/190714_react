@@ -70,6 +70,12 @@ export const reqDeleteImg = (name) =>ajax.post(BASE +'/manage/img/delete',{name}
 
 //添加或修改商品
 export const reqAddUpdateProduct = (product)=>ajax.post(BASE +'/manage/product/'+(product._id?'update':'add'),product)
+
+//获取角色列表
+ export const reqRoles = () => ajax(BASE + '/manage/role/list')
+
+ //添加角色
+ export const reqAddRole = (roleName) =>ajax.post(BASE + 'manage/role/add',{roleName})
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
