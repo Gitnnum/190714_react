@@ -33,7 +33,7 @@ export default class AddAuth extends Component {
     }
 
     //获取权限信息 为父组件收集信息做准备
-    getAuth = ()=>this.state.checkedKeys
+    getMenus = ()=>this.state.checkedKeys
 
     componentWillMount(){
         this.treeNodes = this.getTreeNodes(menuList)
@@ -42,12 +42,20 @@ export default class AddAuth extends Component {
             checkedKeys:menus
         })
     }
-    componentWillReceiveProps(nextProps){
+    // componentWillReceiveProps(nextProps){
+    //     const menus = nextProps.role.menus
+    //     console.log('menus',menus)
+    //     this.setState({
+    //         checkedKeys:menus
+    //     })
+    // }
+    componentWillReceiveProps (nextProps) {
+        console.log('componentWillReceiveProps()', nextProps)
         const menus = nextProps.role.menus
         this.setState({
-            checkedKeys:menus
+          checkedKeys: menus
         })
-    }
+      }
     render() {
         const formItemLayout = {
             labelCol: { span: 4 },  // 左侧label的宽度

@@ -5,42 +5,58 @@ import { Menu, Icon } from 'antd';
 import './index.less'
 import logo from '../../assets/images/logo.png'
 import menuList from '../../config/menuConfig'
+import memoryUtils from '../../utills/memoryUtils'
 const { SubMenu } = Menu;
 class LeftNav extends Component {
+    //显示导航之前先判断是否有权限看到导航条
+    //admin用户全部可以看见   ||   有public属性的导航Item都可以看到   ||   有权限的与menus进行对比，有的才能显示看到
+    hasAuth = (item)=>{
+        const user = memoryUtils.user
+        const menus = user.role.menus
+        if(user.username === 'admin' || item.public || menus.indexOf(item.key)!==-1){
+            return true
+        }else if(item.children){
+            const cItem = item.children.find((cItem)=>menus.indexOf(cItem.key)!==-1)
+            return !!cItem
+        }
+        return false
+    }
     //reduce +递归
     getMenuNodes2 = (menuList)=>{
         const path = this.props.location.pathname
         return menuList.reduce((pre,item)=>{
-            if(!item.children){
-                pre.push((
-                    <Menu.Item key={item.key}>
-                        <Link to={item.key}>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
-                        </Link>
-                    </Menu.Item>
-                ))
-            }else{
-                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
-                // const cItem  = item.children.find(cItem =>path.indexOf(cItem.key) === 0)
-                // const cItem = item.children.find( cItem => cItem.key === path) 
-                if(cItem){
-                    this.openKey = item.key
-                    // console.log(this.openKey)
+            if(this.hasAuth(item)){
+                if(!item.children){
+                    pre.push((
+                        <Menu.Item key={item.key}>
+                            <Link to={item.key}>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </Link>
+                        </Menu.Item>
+                    ))
+                }else{
+                    const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                    // const cItem  = item.children.find(cItem =>path.indexOf(cItem.key) === 0)
+                    // const cItem = item.children.find( cItem => cItem.key === path) 
+                    if(cItem){
+                        this.openKey = item.key
+                        // console.log(this.openKey)
+                    }
+                    pre.push((
+                        <SubMenu
+                            key={item.key}
+                            title={
+                            <span>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </span>
+                            }
+                        >
+                            {this.getMenuNodes2(item.children)}
+                        </SubMenu> 
+                    ))
                 }
-                pre.push((
-                    <SubMenu
-                        key={item.key}
-                        title={
-                        <span>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
-                        </span>
-                        }
-                    >
-                        {this.getMenuNodes2(item.children)}
-                    </SubMenu> 
-                ))
             }
             return pre
         },[])
@@ -49,35 +65,37 @@ class LeftNav extends Component {
     getMenuNodes = (menuList)=>{
         const path = this.props.location.pathname
         return menuList.map((item)=>{
-            if(!item.children){
-                return (
-                    <Menu.Item key={item.key}>
-                        <Link to={item.key}>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
-                        </Link>
-                    </Menu.Item>
-                )
-            }else{
-                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
-                // const cItem = item.children.find( cItem => cItem.key === path) 
-                if(cItem){
-                    this.openKey = item.key
-                    // console.log(this.openKey)
+            if(this.hasAuth(item)){
+                if(!item.children){
+                    return (
+                        <Menu.Item key={item.key}>
+                            <Link to={item.key}>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </Link>
+                        </Menu.Item>
+                    )
+                }else{
+                    const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                    // const cItem = item.children.find( cItem => cItem.key === path) 
+                    if(cItem){
+                        this.openKey = item.key
+                        // console.log(this.openKey)
+                    }
+                    return(
+                        <SubMenu
+                            key={item.key}
+                            title={
+                            <span>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </span>
+                            }
+                        >
+                            {this.getMenuNodes(item.children)}
+                        </SubMenu> 
+                    )
                 }
-                return(
-                    <SubMenu
-                        key={item.key}
-                        title={
-                        <span>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
-                        </span>
-                        }
-                    >
-                        {this.getMenuNodes(item.children)}
-                    </SubMenu> 
-                )
             }
         })
     }

@@ -86,10 +86,9 @@ export default class Role extends Component {
   }
   //更新权限
   updateRole = async ()=>{
-    this.setState({
-      isShowAuth:false
-    })
-    const menus = this.authRef.current.getAuth()
+    
+    const menus = this.authRef.current.getMenus()
+    console.log(menus,'menus')
     const name = memoryUtils.user.username
     const role = this.role
     role.menus = menus
@@ -98,10 +97,16 @@ export default class Role extends Component {
     const result = await reqUpdateRole(role)
     if(result.status === 0){
       message.success('更新权限成功')
-      this.getRoles()
+      // this.getRoles()
+      this.setState({
+        roles: [...this.state.roles]
+      })
     }else{
       message.error('更新权限失败')
     }
+    this.setState({
+      isShowAuth:false
+    })
   }
 
   componentWillMount(){
@@ -146,7 +151,7 @@ export default class Role extends Component {
             isShowAuth:false
           })}
         >
-          <AddAuth role = {role} ref = {this.authRef}/>
+          <AddAuth  ref = {this.authRef} role = {role}/>
         </Modal>
         
         
