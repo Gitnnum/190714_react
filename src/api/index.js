@@ -76,6 +76,9 @@ export const reqAddUpdateProduct = (product)=>ajax.post(BASE +'/manage/product/'
 
  //添加角色
  export const reqAddRole = (roleName) =>ajax.post(BASE + 'manage/role/add',{roleName})
+
+ //更新角色
+ export const reqUpdateRole = (role) =>ajax.post(BASE + 'manage/role/update',role)
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
