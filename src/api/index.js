@@ -79,6 +79,36 @@ export const reqAddUpdateProduct = (product)=>ajax.post(BASE +'/manage/product/'
 
  //更新角色
  export const reqUpdateRole = (role) =>ajax.post(BASE + 'manage/role/update',role)
+
+ //获取用户列表
+ export const reqUsers = () =>ajax(BASE + '/manage/user/list')
+
+ //添加用户
+ export const reqAddUser = (username,password,phone,email,role_id) =>ajax(BASE +'/manage/user/add' ,{
+    method:'post',
+    data:{
+        username,
+        password,
+        phone,
+        email,
+        role_id
+    }
+ })
+
+  //更新用户
+  export const reqUpdateUser = (_id,username,phone,email,role_id) =>ajax(BASE +'/manage/user/update' ,{
+    method:'post',
+    data:{
+     _id,
+     username,
+     phone,
+     email,
+     role_id
+    }
+  })
+  
+  //删除用户
+  export const reqDeleteUser = (userId) =>ajax.post(BASE + 'manage/user/delete' ,{userId})
 // const name = 'liu'
 // const pwd = '123'
 // reqLogin(name,pwd)
