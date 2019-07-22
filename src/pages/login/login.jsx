@@ -1,32 +1,17 @@
 import React,{Component} from 'react'
-import { Form, Icon, Input, Button , message } from 'antd';
+import { Form, Icon, Input, Button  } from 'antd';
 import {Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import {reqLogin} from '../../api'
-import storageUtills from '../../utills/storageUtills'
-import memoryUtils from '../../utills/memoryUtils'
+import {login} from '../../redux/actions'
 class Login extends Component{
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields( async (err, {username,password}) => {
             if (!err) {
-               //alert(`发送ajax登录请求，用户名：${username},密码：${password}`)
-                const result =await reqLogin(username,password)
-                // console.log(result)
-                //登陆成功
-                if(result.status === 0){
-                    const user = result.data
-                    // localStorage.setItem('user_key',JSON.stringify(user))
-                    storageUtills.saveUser(user)
-                    memoryUtils.user = user//内存中存储
-                    this.props.history.replace('/')
-                    message.success('登录成功')
-                }else{
-                    //登陆失败
-                    message.error(result.msg)
-                }
+              this.props.login(username,password)
             }
         })
       };
@@ -47,10 +32,11 @@ class Login extends Component{
     render(){
         // const user = JSON.parse(localStorage.getItem('user_key')  || '{}')
         // const user = storageUtills.getUser()
-        const user = memoryUtils.user
+        const user = this.props.user
         if(user._id){
-            return <Redirect to='/'/>
+            return <Redirect to='/home'/>
         }
+        const error = user.error
         const { getFieldDecorator } = this.props.form
         return(
             <div className='login'>
@@ -59,6 +45,7 @@ class Login extends Component{
                     <h1>后台管理系统</h1>
                 </div>
                 <div className="login-content">
+                    {error ? <div>{error}</div>:null}
                     <h1>用户登录</h1>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item>
@@ -105,4 +92,7 @@ class Login extends Component{
     }
 }
 const WrapperForm = Form.create()(Login)
-export default WrapperForm
+export default connect(
+    state=>({user:state.user}),
+    {login}
+)(WrapperForm)

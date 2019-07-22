@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Modal } from 'antd';
 import {withRouter} from 'react-router-dom'
+import{connect } from 'react-redux'
 
-import memoryUtils from '../../utills/memoryUtils'
-import storageUtills from '../../utills/storageUtills'
+import{logout} from '../../redux/actions'
 import {formateDate} from '../../utills/dateUtils'
-import menuList from '../../config/menuConfig'
 import {reqWeather} from '../../api'
 import LinkButton from '../link-button'
 import './index.less'
@@ -38,9 +37,7 @@ class Header extends Component {
             {
                 title: '您确认要退出吗?',
                 onOk:() => {
-                  storageUtills.removeUser()
-                  memoryUtils.user = {}
-                  this.props.history.replace('/login')
+                  this.props.logout()
                 },
                 onCancel() {
                   console.log('Cancel');
@@ -49,26 +46,26 @@ class Header extends Component {
         )
     }
     //获取title
-    getTitle = () =>{
-        const path = this.props.location.pathname
-        let title = ''
-        menuList.forEach((item)=>{
-            if(item.key===path){
-                title = item.title
-            }else if(item.children){
-                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
-                // const cItem = item.children.find((cItem)=>cItem.key === path)
-                if(cItem){
-                    title = cItem.title
-                }
-            }
-        })
-        return title
-    }
+    // getTitle = () =>{
+    //     const path = this.props.location.pathname
+    //     let title = ''
+    //     menuList.forEach((item)=>{
+    //         if(item.key===path){
+    //             title = item.title
+    //         }else if(item.children){
+    //             const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+    //             // const cItem = item.children.find((cItem)=>cItem.key === path)
+    //             if(cItem){
+    //                 title = cItem.title
+    //             }
+    //         }
+    //     })
+    //     return title
+    // }
     render() {
         const { currentTime,dayPictureUrl,weather } = this.state
-        const user = memoryUtils.user
-        const title = this.getTitle()
+        const user = this.props.user
+        const title = this.props.headerTitle
         return (
             <div className='header'>
                 <div className='header-top'>
@@ -87,4 +84,7 @@ class Header extends Component {
         )
     }
 }
-export default withRouter(Header)
+export default connect(
+    state=>({headerTitle:state.headerTitle,user:state.user}),
+    {logout}
+)(withRouter(Header))
