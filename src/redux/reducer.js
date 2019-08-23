@@ -1,4 +1,5 @@
 import {INCREMENT,DECREMENT} from './action-types'
+import {combineReducers} from 'redux'
 export default function count (state=1,action){
     switch (action.type) {
         case INCREMENT:
@@ -9,3 +10,4 @@ export default function count (state=1,action){
             return state
     }
 }
+
